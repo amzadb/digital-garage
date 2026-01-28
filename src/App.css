@@ -1,0 +1,124 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Digital Garage Styles */
+.garage {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.garage h1 {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 2.5em;
+}
+
+.garage-stats {
+  margin-bottom: 20px;
+}
+
+.total-cars {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px 25px;
+  border-radius: 25px;
+  font-size: 1.2em;
+  font-weight: bold;
+  display: inline-block;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  margin: 0;
+}
+
+.total-cars .count {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px 12px;
+  border-radius: 15px;
+  margin-left: 10px;
+}
+
+.empty-garage {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+  font-size: 1.2em;
+}
+
+.empty-garage p {
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 15px;
+  padding: 30px;
+  margin: 20px auto;
+  max-width: 400px;
+}
+
+.garage p {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 1.1em;
+}
+
+.cars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .cars-grid {
+    grid-template-columns: 1fr;
+    padding: 10px;
+  }
+  
+  .garage h1 {
+    font-size: 2em;
+  }
+  
+  .garage p {
+    font-size: 1em;
+  }
+}
+
+/* Keep existing styles for compatibility */
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
