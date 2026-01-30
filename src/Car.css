@@ -39,7 +39,7 @@
 
 .car-controls {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 8px;
   justify-content: center;
   margin-top: 15px;
@@ -47,7 +47,7 @@
 
 @media (max-width: 480px) {
   .car-controls {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
 }
@@ -122,6 +122,24 @@
   background-color: #c82333;
   transform: scale(1.05);
   box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.edit-button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: bold;
+  background-color: #007bff;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
 }
 
 .light-button.lights-off {

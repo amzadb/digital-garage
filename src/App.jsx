@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Car from './Car'
+import CarForm from './CarForm'
 import './App.css'
 
 function App() {
@@ -17,13 +18,30 @@ function App() {
     setCars(cars.filter(car => car.id !== carId))
   }
 
+  // Add function to add a new car
+  const addCar = (newCar) => {
+    setCars(prevCars => [...prevCars, newCar])
+  }
+
+  // Update function to update an existing car
+  const updateCar = (updatedCar) => {
+    setCars(prevCars => 
+      prevCars.map(car => 
+        car.id === updatedCar.id ? updatedCar : car
+      )
+    )
+  }
+
   return (
     <div className="garage">
       <h1>🚗 The Digital Garage</h1>
       <div className="garage-stats">
         <p className="total-cars">Total Cars: <span className="count">{cars.length}</span></p>
       </div>
-      <p>Welcome to your car dashboard! Toggle the headlights for each car.</p>
+      <p>Welcome to the car dashboard! Add new cars and toggle features for each one.</p>
+      
+      {/* Car Form Component */}
+      <CarForm onAddCar={addCar} />
       
       <div className="cars-grid">
         {cars.map(car => (
@@ -34,12 +52,13 @@ function App() {
             model={car.model}
             year={car.year}
             onDelete={deleteCar}
+            onUpdate={updateCar}
           />
         ))}
       </div>
       {cars.length === 0 && (
         <div className="empty-garage">
-          <p>🏁 Your garage is empty! All cars have been removed.</p>
+          <p>🏁 Your garage is empty! Add your first car to get started.</p>
         </div>
       )}
     </div>
