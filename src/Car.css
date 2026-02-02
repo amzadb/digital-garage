@@ -177,3 +177,38 @@
     box-shadow: 0 6px 20px rgba(255, 193, 7, 0.3);
   }
 }
+
+/* Fuel Level Indicator Styles */
+.fuel-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 5px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.fuel-level {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+  background: linear-gradient(90deg, 
+    rgba(40, 167, 69, 0.8) 0%, 
+    rgba(40, 167, 69, 1) 100%);
+  position: relative;
+}
+
+.fuel-level::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.3) 50%, 
+    transparent 100%);
+  border-radius: 4px;
+}

@@ -48,6 +48,25 @@
   font-size: 1.2em;
 }
 
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #667eea;
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+.error {
+  text-align: center;
+  padding: 15px;
+  background: #ffe6e6;
+  color: #d63384;
+  border: 1px solid #f5c2c7;
+  border-radius: 8px;
+  margin: 10px 0;
+  font-weight: 500;
+}
+
 .empty-garage p {
   background: #f8f9fa;
   border: 2px dashed #dee2e6;

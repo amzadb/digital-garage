@@ -1,17 +1,41 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Car from './Car'
 import CarForm from './CarForm'
+import fallbackCarsData from './data/cars.json'
 import './App.css'
 
 function App() {
   // Define the Data - Array of car objects (now using state)
-  const [cars, setCars] = useState([
-    { id: 1, brand: 'Tesla', model: 'Cybertruck', year: 2024 },
-    { id: 2, brand: 'BMW', model: 'X5', year: 2023 },
-    { id: 3, brand: 'Audi', model: 'A4', year: 2022 },
-    { id: 4, brand: 'Mercedes', model: 'C-Class', year: 2023 },
-    { id: 5, brand: 'Ford', model: 'Mustang', year: 2024 }
-  ])
+  const [cars, setCars] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  // Fetch cars data from API
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch('https://jsonplaceholder.typicode.com/cars')
+        
+        if (!response.ok) {
+          // If the cars endpoint doesn't exist, use fallback data
+          setCars(fallbackCarsData)
+        } else {
+          const data = await response.json()
+          setCars(data)
+        }
+      } catch (err) {
+        console.error('Failed to fetch cars:', err)
+        setError('Failed to load cars data')
+        // Use fallback data on error
+        setCars(fallbackCarsData)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchCars()
+  }, [])
 
   // Delete function to remove a car by ID
   const deleteCar = (carId) => {
@@ -40,6 +64,9 @@ function App() {
       </div>
       <p>Welcome to the car dashboard! Add new cars and toggle features for each one.</p>
       
+      {loading && <div className="loading">Loading cars...</div>}
+      {error && <div className="error">{error}</div>}
+      
       {/* Car Form Component */}
       <CarForm onAddCar={addCar} />
       
@@ -51,12 +78,13 @@ function App() {
             brand={car.brand}
             model={car.model}
             year={car.year}
+            fuelLevel={car.fuelLevel}
             onDelete={deleteCar}
             onUpdate={updateCar}
           />
         ))}
       </div>
-      {cars.length === 0 && (
+      {cars.length === 0 && !loading && (
         <div className="empty-garage">
           <p>🏁 Your garage is empty! Add your first car to get started.</p>
         </div>

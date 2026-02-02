@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import CarEditForm from './CarEditForm';
 import './Car.css';
 
-function Car({ id, brand, model, year, onDelete, onUpdate }) {
+function Car({ id, brand, model, year, fuelLevel, onDelete, onUpdate }) {
   // Add State - Use useState to track headlightsOn and engineRunning booleans
   const [headlightsOn, setHeadlightsOn] = useState(false);
   const [engineRunning, setEngineRunning] = useState(false);
@@ -54,11 +54,25 @@ function Car({ id, brand, model, year, onDelete, onUpdate }) {
     return '2px solid #ccc'; // Gray border
   };
 
+  // Get fuel level color based on percentage
+  const getFuelLevelColor = () => {
+    if (fuelLevel > 70) return '#28a745'; // Green
+    if (fuelLevel > 30) return '#ffc107'; // Yellow
+    return '#dc3545'; // Red
+  };
+
+  // Get fuel level emoji based on percentage
+  const getFuelLevelEmoji = () => {
+    if (fuelLevel > 70) return '⛽'; // Full
+    if (fuelLevel > 30) return '⚠️'; // Medium
+    return '🚨'; // Low
+  };
+
   return (
     <>
       {isEditing ? (
         <CarEditForm
-          car={{ id, brand, model, year }}
+          car={{ id, brand, model, year, fuelLevel }}
           onUpdateCar={handleUpdate}
           onCancel={handleCancelEdit}
         />
@@ -79,6 +93,21 @@ function Car({ id, brand, model, year, onDelete, onUpdate }) {
             <p className="status">
               Lights: {headlightsOn ? "🔦 On" : "🌑 Off"}
             </p>
+            <p className="status">
+              Fuel: {getFuelLevelEmoji()} 
+              <span style={{ color: getFuelLevelColor(), fontWeight: 'bold' }}>
+                {fuelLevel}%
+              </span>
+            </p>
+            <div className="fuel-bar">
+              <div 
+                className="fuel-level" 
+                style={{ 
+                  width: `${fuelLevel}%`, 
+                  backgroundColor: getFuelLevelColor() 
+                }}
+              ></div>
+            </div>
           </div>
           
           <div className="car-controls">
@@ -101,7 +130,7 @@ function Car({ id, brand, model, year, onDelete, onUpdate }) {
               onClick={handleEdit}
               title="Edit this car"
             >
-              ✏️ Edit
+              ✏️
             </button>
             
             <button 
@@ -109,7 +138,7 @@ function Car({ id, brand, model, year, onDelete, onUpdate }) {
               onClick={handleDelete}
               title="Remove this car from garage"
             >
-              🗑️ Delete
+              🗑️
             </button>
           </div>
         </div>

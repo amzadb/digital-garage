@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "brand": "Tesla",
+    "model": "Cybertruck",
+    "year": 2024,
+    "fuelLevel": 85
+  },
+  {
+    "id": 2,
+    "brand": "BMW",
+    "model": "X5",
+    "year": 2023,
+    "fuelLevel": 42
+  },
+  {
+    "id": 3,
+    "brand": "Audi",
+    "model": "A4",
+    "year": 2022,
+    "fuelLevel": 67
+  },
+  {
+    "id": 4,
+    "brand": "Mercedes",
+    "model": "C-Class",
+    "year": 2023,
+    "fuelLevel": 91
+  },
+  {
+    "id": 5,
+    "brand": "Ford",
+    "model": "Mustang",
+    "year": 2024,
+    "fuelLevel": 23
+  },
+  {
+    "id": 6,
+    "brand": "Chevrolet",
+    "model": "Camaro",
+    "year": 2022,
+    "fuelLevel": 76
+  },
+  {
+    "id": 7,
+    "brand": "Toyota",
+    "model": "Corolla",
+    "year": 2023,
+    "fuelLevel": 55
+  },
+  {
+    "id": 8,
+    "brand": "Honda",
+    "model": "Civic",
+    "year": 2024,
+    "fuelLevel": 89
+  },
+  {
+    "id": 9,
+    "brand": "Nissan",
+    "model": "Altima",
+    "year": 2022,
+    "fuelLevel": 34
+  },
+  {
+    "id": 10,
+    "brand": "Volkswagen",
+    "model": "Golf",
+    "year": 2023,
+    "fuelLevel": 62
+  }
+]

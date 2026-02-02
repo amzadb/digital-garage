@@ -5,7 +5,8 @@ function CarForm({ onAddCar }) {
   const [formData, setFormData] = useState({
     brand: '',
     model: '',
-    year: ''
+    year: '',
+    fuelLevel: ''
   });
   
   const [errors, setErrors] = useState({});
@@ -51,6 +52,19 @@ function CarForm({ onAddCar }) {
           return `Year cannot be more than ${currentYear + 2}`;
         } else if (!/^\d{4}$/.test(value)) {
           return 'Year must be exactly 4 digits';
+        }
+        return '';
+        
+      case 'fuelLevel':
+        const fuelNum = parseInt(value);
+        if (!value.trim()) {
+          return 'Fuel level is required';
+        } else if (isNaN(fuelNum)) {
+          return 'Fuel level must be a valid number';
+        } else if (fuelNum < 0) {
+          return 'Fuel level cannot be negative';
+        } else if (fuelNum > 100) {
+          return 'Fuel level cannot exceed 100%';
         }
         return '';
         
@@ -117,6 +131,18 @@ function CarForm({ onAddCar }) {
       newErrors.year = 'Year must be exactly 4 digits';
     }
 
+    // Fuel level validation
+    const fuelNum = parseInt(formData.fuelLevel);
+    if (!formData.fuelLevel.trim()) {
+      newErrors.fuelLevel = 'Fuel level is required';
+    } else if (isNaN(fuelNum)) {
+      newErrors.fuelLevel = 'Fuel level must be a valid number';
+    } else if (fuelNum < 0) {
+      newErrors.fuelLevel = 'Fuel level cannot be negative';
+    } else if (fuelNum > 100) {
+      newErrors.fuelLevel = 'Fuel level cannot exceed 100%';
+    }
+
     return newErrors;
   };
 
@@ -139,14 +165,15 @@ function CarForm({ onAddCar }) {
         id: Date.now(), // Simple ID generation for demo
         brand: formData.brand.trim(),
         model: formData.model.trim(),
-        year: parseInt(formData.year)
+        year: parseInt(formData.year),
+        fuelLevel: parseInt(formData.fuelLevel)
       };
 
       // Add car through parent component
       onAddCar(newCar);
 
       // Reset form
-      setFormData({ brand: '', model: '', year: '' });
+      setFormData({ brand: '', model: '', year: '', fuelLevel: '' });
       setErrors({});
       setShowForm(false);
       
@@ -160,7 +187,7 @@ function CarForm({ onAddCar }) {
 
   // Reset form
   const resetForm = () => {
-    setFormData({ brand: '', model: '', year: '' });
+    setFormData({ brand: '', model: '', year: '', fuelLevel: '' });
     setErrors({});
   };
 
@@ -246,6 +273,25 @@ function CarForm({ onAddCar }) {
                 disabled={isSubmitting}
               />
               {errors.year && <span className="error-message">{errors.year}</span>}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="fuelLevel">
+                Fuel Level (%) <span className="required">*</span>
+              </label>
+              <input
+                type="number"
+                id="fuelLevel"
+                name="fuelLevel"
+                value={formData.fuelLevel}
+                onChange={handleInputChange}
+                className={errors.fuelLevel ? 'error' : ''}
+                placeholder="e.g., 75"
+                min="0"
+                max="100"
+                disabled={isSubmitting}
+              />
+              {errors.fuelLevel && <span className="error-message">{errors.fuelLevel}</span>}
             </div>
 
             <div className="form-actions">

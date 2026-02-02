@@ -5,7 +5,8 @@ function CarEditForm({ car, onUpdateCar, onCancel }) {
   const [formData, setFormData] = useState({
     brand: car.brand || '',
     model: car.model || '',
-    year: car.year ? car.year.toString() : ''
+    year: car.year ? car.year.toString() : '',
+    fuelLevel: car.fuelLevel ? car.fuelLevel.toString() : ''
   });
   
   const [errors, setErrors] = useState({});
@@ -16,7 +17,8 @@ function CarEditForm({ car, onUpdateCar, onCancel }) {
     setFormData({
       brand: car.brand || '',
       model: car.model || '',
-      year: car.year ? car.year.toString() : ''
+      year: car.year ? car.year.toString() : '',
+      fuelLevel: car.fuelLevel ? car.fuelLevel.toString() : ''
     });
     setErrors({});
   }, [car]);
@@ -63,6 +65,19 @@ function CarEditForm({ car, onUpdateCar, onCancel }) {
         }
         return '';
         
+      case 'fuelLevel':
+        const fuelNum = parseInt(value);
+        if (!value.trim()) {
+          return 'Fuel level is required';
+        } else if (isNaN(fuelNum)) {
+          return 'Fuel level must be a valid number';
+        } else if (fuelNum < 0) {
+          return 'Fuel level cannot be negative';
+        } else if (fuelNum > 100) {
+          return 'Fuel level cannot exceed 100%';
+        }
+        return '';
+        
       default:
         return '';
     }
@@ -91,7 +106,7 @@ function CarEditForm({ car, onUpdateCar, onCancel }) {
     const newErrors = {};
     
     // Validate all fields
-    ['brand', 'model', 'year'].forEach(field => {
+    ['brand', 'model', 'year', 'fuelLevel'].forEach(field => {
       const error = validateField(field, formData[field]);
       if (error) {
         newErrors[field] = error;
@@ -120,7 +135,8 @@ function CarEditForm({ car, onUpdateCar, onCancel }) {
         ...car,
         brand: formData.brand.trim(),
         model: formData.model.trim(),
-        year: parseInt(formData.year)
+        year: parseInt(formData.year),
+        fuelLevel: parseInt(formData.fuelLevel)
       };
 
       // Update car through parent component
@@ -213,6 +229,25 @@ function CarEditForm({ car, onUpdateCar, onCancel }) {
             disabled={isSubmitting}
           />
           {errors.year && <span className="error-message">{errors.year}</span>}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="edit-fuelLevel">
+            Fuel Level (%) <span className="required">*</span>
+          </label>
+          <input
+            type="number"
+            id="edit-fuelLevel"
+            name="fuelLevel"
+            value={formData.fuelLevel}
+            onChange={handleInputChange}
+            className={errors.fuelLevel ? 'error' : ''}
+            placeholder="e.g., 75"
+            min="0"
+            max="100"
+            disabled={isSubmitting}
+          />
+          {errors.fuelLevel && <span className="error-message">{errors.fuelLevel}</span>}
         </div>
 
         <div className="form-actions">
