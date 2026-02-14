@@ -37,10 +37,9 @@ The Digital Garage is an interactive dashboard that displays a collection of car
 - **Responsive Forms**: Mobile-optimized form layouts
 
 ### 🌐 **API Integration & Data Management**
-- **External API Loading**: Fetches car data from `https://jsonplaceholder.typicode.com/cars`
+- **Backend API Loading**: Fetches car data from your own backend at `/api/cars`
 - **Loading States**: Shows "Loading cars..." while fetching data
 - **Error Handling**: Graceful error handling with user-friendly messages
-- **Fallback Data**: Uses local JSON data when API is unavailable
 - **Data Persistence**: Local state management with add/edit/delete operations
 
 ### 🔧 **Engine Control**
@@ -94,7 +93,7 @@ src/
 - **CRUD Functions**: onDelete, onUpdate, onAddCar callbacks passed from parent
 - **Form Props**: car data, onUpdateCar, onCancel for editing
 - **Independent State**: Each car maintains its own engine/light status
-- **API Integration**: Centralized data fetching with fallback mechanisms
+- **API Integration**: Centralized data fetching from backend API
 
 ## 🛠️ Installation & Setup
 
