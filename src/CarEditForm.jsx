@@ -139,8 +139,8 @@ function CarEditForm({ car, onUpdateCar, onCancel }) {
         fuelLevel: parseInt(formData.fuelLevel)
       };
 
-      // Update car through parent component
-      onUpdateCar(updatedCar);
+      // Update car through parent component (await if async)
+      await onUpdateCar(updatedCar);
       
     } catch (error) {
       console.error('Error updating car:', error);

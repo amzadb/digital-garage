@@ -10,11 +10,11 @@ The Digital Garage is an interactive dashboard that displays a collection of car
 
 ### 🚙 **Vehicle Management**
 - **Car Display**: View details for multiple cars including brand, model, year, and fuel level
-- **Add New Car**: ➕ Interactive form to add cars with real-time validation
-- **Edit Car**: ✏️ In-place editing of car details with validation
-- **Delete Vehicle**: 🗑️ Remove cars from the garage with icon-only buttons
+- **Add New Car**: ➕ Interactive form to add cars with real-time validation (sends POST to `/api/cars`)
+- **Edit Car**: ✏️ In-place editing of car details with validation (sends PUT to `/api/cars/:id`)
+- **Delete Vehicle**: 🗑️ Remove cars from the garage with icon-only buttons (sends DELETE to `/api/cars/:id`)
 - **Live Counter**: Real-time "Total Cars" counter that updates automatically
-- **API Integration**: Loads car data from external API with fallback to local JSON
+- **API Integration**: Loads car data from backend API with fallback to local JSON
 
 ### ⛽ **Fuel Level Management**
 - **Fuel Level Display**: Visual fuel percentage with color-coded indicators
@@ -98,6 +98,15 @@ src/
 
 ## 🛠️ Installation & Setup
 
+### Backend API Requirements
+
+- **GET /api/cars**: Returns an array of car objects
+- **POST /api/cars**: Accepts a car object (brand, model, year, fuelLevel) and returns the created car with an id
+- **PUT /api/cars/:id**: Accepts updated car data (brand, model, year, fuelLevel) and returns the updated car
+- **DELETE /api/cars/:id**: Deletes the car with the given id
+
+All endpoints should accept and return JSON. See the frontend code for the expected data structure.
+
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
@@ -109,12 +118,31 @@ src/
    npm install
    ```
 
-3. **Start the development server**
+
+3. **(Optional) Backend API Setup**
+   Ensure your backend server (for /api/cars) is running at http://localhost:3000 and has CORS enabled if accessed directly.
+
+4. **Vite Proxy for API (Recommended for Local Dev)**
+   The project is configured to proxy `/api` requests to your backend using Vite's dev server. This avoids CORS issues during development.
+   - See `vite.config.js` for the proxy setup:
+     ```js
+     server: {
+       proxy: {
+         '/api': {
+           target: 'http://localhost:3000',
+           changeOrigin: true,
+           secure: false,
+         },
+       },
+     },
+     ```
+
+5. **Start the development server**
    ```bash
    npm run dev
    ```
 
-4. **Open your browser**
+6. **Open your browser**
    Navigate to `http://localhost:5173` (or the port shown in terminal)
 
 ## 🎮 How to Use
@@ -217,3 +245,9 @@ src/
 ---
 
 **Enjoy managing your Digital Garage! 🏁**
+## 🛠️ CORS Troubleshooting
+
+If you see CORS errors in the browser console when fetching `/api/cars`, ensure:
+- Your backend server is running and accessible at the configured target (default: http://localhost:3000)
+- The backend sends the correct `Access-Control-Allow-Origin` header (for direct API calls)
+- You are using the Vite proxy (recommended) for local development

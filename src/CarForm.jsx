@@ -169,14 +169,13 @@ function CarForm({ onAddCar }) {
         fuelLevel: parseInt(formData.fuelLevel)
       };
 
-      // Add car through parent component
-      onAddCar(newCar);
+      // Add car through parent component (await if async)
+      await onAddCar(newCar);
 
       // Reset form
       setFormData({ brand: '', model: '', year: '', fuelLevel: '' });
       setErrors({});
       setShowForm(false);
-      
     } catch (error) {
       console.error('Error adding car:', error);
       alert('Error adding car. Please try again.');

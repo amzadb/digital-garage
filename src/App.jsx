@@ -15,14 +15,23 @@ function App() {
     const fetchCars = async () => {
       try {
         setLoading(true)
-        const response = await fetch('https://jsonplaceholder.typicode.com/cars')
+        const response = await fetch('http://localhost:3000/api/cars?ts=' + new Date().getTime()) // Cache busting with timestamp')
         
-        if (!response.ok) {
-          // If the cars endpoint doesn't exist, use fallback data
+        console.log('Fetch response:', response)
+        if (response.status === 304 || !response.ok) {
+          // If the cars endpoint doesn't exist or data is not modified, 
+          // use fallback data
           setCars(fallbackCarsData)
         } else {
-          const data = await response.json()
-          setCars(data)
+          try {
+            const data = await response.json()
+            console.log('Parsed cars data:', data)
+            setCars(data)
+          } catch (jsonErr) {
+            console.error('Error parsing JSON:', jsonErr)
+            setError('Failed to parse cars data')
+            setCars(fallbackCarsData)
+          }
         }
       } catch (err) {
         console.error('Failed to fetch cars:', err)
@@ -37,23 +46,68 @@ function App() {
     fetchCars()
   }, [])
 
-  // Delete function to remove a car by ID
-  const deleteCar = (carId) => {
-    setCars(cars.filter(car => car.id !== carId))
+  // Delete function to remove a car by ID (with backend DELETE)
+  const deleteCar = async (carId) => {
+    try {
+      const response = await fetch(`/api/cars/${carId}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete car from backend');
+      }
+      setCars(prevCars => prevCars.filter(car => car.id !== carId));
+    } catch (err) {
+      console.error('Error deleting car from backend:', err);
+      setCars(prevCars => prevCars.filter(car => car.id !== carId)); // fallback: update local state
+    }
   }
 
-  // Add function to add a new car
-  const addCar = (newCar) => {
-    setCars(prevCars => [...prevCars, newCar])
+  // Add function to add a new car (with backend POST)
+  const addCar = async (newCar) => {
+    try {
+      // Remove id before sending to backend
+      const { id, ...carData } = newCar;
+      const response = await fetch('/api/cars', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(carData),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to add car to backend');
+      }
+      // Use the returned car (with backend-generated id)
+      const savedCar = await response.json();
+      setCars(prevCars => [...prevCars, savedCar]);
+    } catch (err) {
+      console.error('Error adding car to backend:', err);
+      setCars(prevCars => [...prevCars, newCar]); // fallback: update local state
+    }
   }
 
   // Update function to update an existing car
-  const updateCar = (updatedCar) => {
-    setCars(prevCars => 
-      prevCars.map(car => 
-        car.id === updatedCar.id ? updatedCar : car
-      )
-    )
+  // Update function to update an existing car (with backend PUT)
+  const updateCar = async (updatedCar) => {
+    try {
+      // Remove id from body, but use it in URL
+      const { id, ...carData } = updatedCar;
+      const response = await fetch(`/api/cars/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(carData),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to update car in backend');
+      }
+      const savedCar = await response.json();
+      setCars(prevCars => prevCars.map(car => car.id === savedCar.id ? savedCar : car));
+    } catch (err) {
+      console.error('Error updating car in backend:', err);
+      setCars(prevCars => prevCars.map(car => car.id === updatedCar.id ? updatedCar : car)); // fallback: update local state
+    }
   }
 
   return (
