@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import Car from './Car'
 import CarForm from './CarForm'
-import fallbackCarsData from './data/cars.json'
 import './App.css'
 
 function App() {
+    // Search and filter state
+    const [searchTerm, setSearchTerm] = useState('');
+    const [yearFilter, setYearFilter] = useState('');
   // Define the Data - Array of car objects (now using state)
   const [cars, setCars] = useState([])
   const [loading, setLoading] = useState(true)
@@ -18,10 +20,8 @@ function App() {
         const response = await fetch('http://localhost:3000/api/cars?ts=' + new Date().getTime()) // Cache busting with timestamp')
         
         console.log('Fetch response:', response)
-        if (response.status === 304 || !response.ok) {
-          // If the cars endpoint doesn't exist or data is not modified, 
-          // use fallback data
-          setCars(fallbackCarsData)
+        if (!response.ok) {
+          setError('Failed to load cars data')
         } else {
           try {
             const data = await response.json()
@@ -30,14 +30,12 @@ function App() {
           } catch (jsonErr) {
             console.error('Error parsing JSON:', jsonErr)
             setError('Failed to parse cars data')
-            setCars(fallbackCarsData)
           }
         }
       } catch (err) {
         console.error('Failed to fetch cars:', err)
         setError('Failed to load cars data')
-        // Use fallback data on error
-        setCars(fallbackCarsData)
+        // No fallback data; just leave cars as is
       } finally {
         setLoading(false)
       }
@@ -113,34 +111,72 @@ function App() {
   return (
     <div className="garage">
       <h1>🚗 The Digital Garage</h1>
-      <div className="garage-stats">
-        <p className="total-cars">Total Cars: <span className="count">{cars.length}</span></p>
-      </div>
       <p>Welcome to the car dashboard! Add new cars and toggle features for each one.</p>
-      
+
+      {/* Search, Filter, and Add Car Controls Row */}
+      <div className="controls-row">
+        <div className="add-car-btn-wrapper left-align">
+          <CarForm onAddCar={addCar} />
+        </div>
+        <div className="search-filter-group">
+          <p className="total-cars">Total Cars: <span className="count">{cars.length}</span>
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Search by brand or model..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+          <select
+            className="year-filter"
+            value={yearFilter}
+            onChange={e => setYearFilter(e.target.value)}
+          >
+            <option value="">All Years</option>
+            {[...new Set(cars.map(car => car.year))].sort((a, b) => b - a).map(year => (
+              <option key={year} value={year}>{year}</option>
+            ))}
+          </select>
+          </p>
+        </div>
+
+      </div>
+
       {loading && <div className="loading">Loading cars...</div>}
       {error && <div className="error">{error}</div>}
-      
-      {/* Car Form Component */}
-      <CarForm onAddCar={addCar} />
-      
+
+      {/* Filtered Cars Grid */}
       <div className="cars-grid">
-        {cars.map(car => (
-          <Car 
-            key={car.id}
-            id={car.id}
-            brand={car.brand}
-            model={car.model}
-            year={car.year}
-            fuelLevel={car.fuelLevel}
-            onDelete={deleteCar}
-            onUpdate={updateCar}
-          />
-        ))}
+        {cars
+          .filter(car => {
+            const matchesSearch =
+              car.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              car.model.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesYear = yearFilter ? String(car.year) === yearFilter : true;
+            return matchesSearch && matchesYear;
+          })
+          .map(car => (
+            <Car
+              key={car.id}
+              id={car.id}
+              brand={car.brand}
+              model={car.model}
+              year={car.year}
+              fuelLevel={car.fuelLevel}
+              onDelete={deleteCar}
+              onUpdate={updateCar}
+            />
+          ))}
       </div>
-      {cars.length === 0 && !loading && (
+      {cars.filter(car => {
+        const matchesSearch =
+          car.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          car.model.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesYear = yearFilter ? String(car.year) === yearFilter : true;
+        return matchesSearch && matchesYear;
+      }).length === 0 && !loading && (
         <div className="empty-garage">
-          <p>🏁 Your garage is empty! Add your first car to get started.</p>
+          <p>🏁 No cars match your search/filter. Try adjusting your criteria.</p>
         </div>
       )}
     </div>

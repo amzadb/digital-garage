@@ -13,7 +13,7 @@ The Digital Garage is an interactive dashboard that displays a collection of car
 - **Add New Car**: ➕ Interactive form to add cars with real-time validation (sends POST to `/api/cars`)
 - **Edit Car**: ✏️ In-place editing of car details with validation (sends PUT to `/api/cars/:id`)
 - **Delete Vehicle**: 🗑️ Remove cars from the garage with icon-only buttons (sends DELETE to `/api/cars/:id`)
-- **Live Counter**: Real-time "Total Cars" counter that updates automatically
+- **Live Counter & Search/Filter**: Real-time "Total Cars" counter, search by brand/model, and filter by year—all in a unified control bar
 - **API Integration**: Loads car data from backend API with fallback to local JSON
 
 ### ⛽ **Fuel Level Management**
@@ -38,6 +38,7 @@ The Digital Garage is an interactive dashboard that displays a collection of car
 
 ### 🌐 **API Integration & Data Management**
 - **Backend API Loading**: Fetches car data from your own backend at `/api/cars`
+- **Search & Filter**: Instantly search cars by brand/model and filter by year using the top control bar
 - **Loading States**: Shows "Loading cars..." while fetching data
 - **Error Handling**: Graceful error handling with user-friendly messages
 - **Data Persistence**: Local state management with add/edit/delete operations
@@ -166,7 +167,7 @@ All endpoints should accept and return JSON. See the frontend code for the expec
 
 ### **Managing Vehicles**
 1. View all cars in the responsive grid layout with fuel indicators
-2. Check the "Total Cars" counter at the top
+2. Use the top control bar to see the "Total Cars" count, search by brand/model, and filter by year
 3. Use the **🗑️** (delete icon) to remove unwanted vehicles
 4. Monitor fuel levels with color-coded progress bars
 
@@ -234,7 +235,7 @@ All endpoints should accept and return JSON. See the frontend code for the expec
 - Car color customization
 - Garage themes
 - Export/import garage configurations
-- Search and filter functionality
+- ~~Search and filter functionality~~ ✅ **Completed**
 - Bulk operations (select multiple cars)
 - Car categories and sorting
 - Fuel consumption tracking
